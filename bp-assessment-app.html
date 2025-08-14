@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Pressure Assessment Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .form-section {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        .bp-inputs {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        input[type="number"] {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1.1em;
+            width: 100px;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .slash {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .symptoms-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .symptom-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .symptom-item input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .symptom-item label {
+            margin: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .assess-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .assess-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .assess-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-section {
+            display: none;
+            padding: 40px;
+            border-top: 1px solid #e0e0e0;
+            background: #f8f9fa;
+        }
+
+        .result-card {
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .result-normal {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .result-action {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+
+        .result-schedule {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+        }
+
+        .result-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .reset-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .reset-btn:hover {
+            background: #5a6268;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .bp-inputs {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Blood Pressure Assessment</h1>
+            <p>Clinical Decision Support Tool</p>
+        </div>
+        
+        <div class="form-section">
+            <form id="bpForm">
+                <div class="form-group">
+                    <label for="systolic">Blood Pressure Reading:</label>
+                    <div class="bp-inputs">
+                        <input type="number" id="systolic" min="70" max="250" placeholder="120" required>
+                        <span class="slash">/</span>
+                        <input type="number" id="diastolic" min="40" max="150" placeholder="80" required>
+                        <span style="margin-left: 10px; color: #666;">mmHg</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="diabetic">
+                        <label for="diabetic">Patient is diabetic</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Current Symptoms (if any):</label>
+                    <div class="symptoms-group">
+                        <div class="symptom-item">
+                            <input type="checkbox" id="chestPain">
+                            <label for="chestPain">Chest pain</label>
+                        </div>
+                        <div class="symptom-item">
+                            <input type="checkbox" id="palpitations">
+                            <label for="palpitations">Palpitations</label>
+                        </div>
+                        <div class="symptom-item">
+                            <input type="checkbox" id="sob">
+                            <label for="sob">Shortness of breath (SOB)</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="assess-btn">Assess Blood Pressure</button>
+            </form>
+        </div>
+        
+        <div id="resultSection" class="result-section">
+            <div id="resultCard" class="result-card">
+                <div id="resultTitle" class="result-title"></div>
+                <div id="resultMessage"></div>
+                <button type="button" class="reset-btn" onclick="resetForm()">New Assessment</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('bpForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            assessBloodPressure();
+        });
+
+        function assessBloodPressure() {
+            const systolic = parseInt(document.getElementById('systolic').value);
+            const diastolic = parseInt(document.getElementById('diastolic').value);
+            const isDiabetic = document.getElementById('diabetic').checked;
+            const hasChestPain = document.getElementById('chestPain').checked;
+            const hasPalpitations = document.getElementById('palpitations').checked;
+            const hasSOB = document.getElementById('sob').checked;
+            
+            const hasSymptoms = hasChestPain || hasPalpitations || hasSOB;
+            
+            let result = {
+                type: '',
+                title: '',
+                message: '',
+                class: ''
+            };
+
+            // Follow the flowchart logic exactly
+            if (isDiabetic) {
+                // Diabetic patient
+                if (systolic < 130 && diastolic < 80) {
+                    result = {
+                        type: 'normal',
+                        title: 'Normal Blood Pressure',
+                        message: 'Code result<br>No further action required',
+                        class: 'result-normal'
+                    };
+                } else if ((systolic > 130 && systolic < 160) || (diastolic > 80 && diastolic < 95)) {
+                    if (hasSymptoms) {
+                        result = {
+                            type: 'immediate',
+                            title: 'Immediate Action Required',
+                            message: 'Patient has symptoms (chest pain/palpitations/SOB)<br><strong>Discuss immediately with duty doctor</strong>',
+                            class: 'result-action'
+                        };
+                    } else {
+                        result = {
+                            type: 'schedule',
+                            title: 'Schedule Follow-up',
+                            message: 'Book next available telephone consultation<br>with pharmacist or PA',
+                            class: 'result-schedule'
+                        };
+                    }
+                } else if (systolic >= 160 || diastolic >= 95) {
+                    result = {
+                        type: 'same_day',
+                        title: 'Same Day Action Required',
+                        message: 'BP ≥ 160/95<br><strong>Discuss with duty doctor on the day</strong>',
+                        class: 'result-action'
+                    };
+                }
+            } else {
+                // Non-diabetic patient
+                if (systolic < 140 && diastolic < 90) {
+                    result = {
+                        type: 'normal',
+                        title: 'Normal Blood Pressure',
+                        message: 'Code result<br>No further action required',
+                        class: 'result-normal'
+                    };
+                } else if ((systolic > 130 && systolic < 160) || (diastolic > 80 && diastolic < 95)) {
+                    if (hasSymptoms) {
+                        result = {
+                            type: 'immediate',
+                            title: 'Immediate Action Required',
+                            message: 'Patient has symptoms (chest pain/palpitations/SOB)<br><strong>Discuss immediately with duty doctor</strong>',
+                            class: 'result-action'
+                        };
+                    } else {
+                        result = {
+                            type: 'schedule',
+                            title: 'Schedule Follow-up',
+                            message: 'Book next available telephone consultation<br>with pharmacist or PA',
+                            class: 'result-schedule'
+                        };
+                    }
+                } else if (systolic >= 160 || diastolic >= 95) {
+                    result = {
+                        type: 'same_day',
+                        title: 'Same Day Action Required',
+                        message: 'BP ≥ 160/95<br><strong>Discuss with duty doctor on the day</strong>',
+                        class: 'result-action'
+                    };
+                }
+            }
+
+            displayResult(result);
+        }
+
+        function displayResult(result) {
+            const resultSection = document.getElementById('resultSection');
+            const resultCard = document.getElementById('resultCard');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+
+            resultTitle.textContent = result.title;
+            resultMessage.innerHTML = result.message;
+            resultCard.className = `result-card ${result.class}`;
+            
+            resultSection.style.display = 'block';
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            document.getElementById('bpForm').reset();
+            document.getElementById('resultSection').style.display = 'none';
+        }
+
+        // Auto-format BP inputs
+        document.getElementById('systolic').addEventListener('input', function(e) {
+            if (e.target.value.length > 3) {
+                e.target.value = e.target.value.slice(0, 3);
+            }
+        });
+
+        document.getElementById('diastolic').addEventListener('input', function(e) {
+            if (e.target.value.length > 3) {
+                e.target.value = e.target.value.slice(0, 3);
+            }
+        });
+    </script>
+</body>
+</html>
