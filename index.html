@@ -35,6 +35,19 @@
             color: white;
             padding: 30px;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .header-logo {
+            height: 55px;
+            width: auto;
+        }
+        
+        .header-content {
+            flex: 1;
         }
 
         .header h1 {
@@ -218,8 +231,11 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Blood Pressure Assessment</h1>
-            <p>Decision Support Tool for HCA and Admin</p>
+            <img src="static/images/logo.png" alt="Logo" class="header-logo">
+            <div class="header-content">
+                <h1>Blood Pressure Assessment</h1>
+                <p>Decision Support Tool for HCA and Admin</p>
+            </div>
         </div>
         
         <div class="form-section">
